@@ -4,10 +4,12 @@ import 'package:to_do_list/widgets/task_card.dart';
 
 class TasksScreen extends StatelessWidget {
   final List<Task> tasks;
+  final Function(int) delete;
 
   const TasksScreen({
     super.key,
     required this.tasks,
+    required this.delete,
   });
 
   @override
@@ -17,7 +19,16 @@ class TasksScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Column(
-          children: tasks.map((task) => TaskCard(task: task)).toList(),
+          children: tasks
+              .asMap()
+              .map((index, task) => MapEntry(
+                  index,
+                  TaskCard(
+                    task: task,
+                    delete: () => delete(index),
+                  )))
+              .values
+              .toList(),
         ),
       ),
     );

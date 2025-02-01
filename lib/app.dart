@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/task.dart';
 import 'package:to_do_list/screens/tasks_screen.dart';
+import 'package:to_do_list/widgets/new_task.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -29,6 +30,25 @@ class _AppState extends State<App> {
         doneTime: 'Done: 01.01.2025 / 17:00'),
   ];
 
+  void onTaskCreated(Task newTask) {
+    setState(() {
+      tasks.add(newTask);
+    });
+  }
+
+  void delete(int index) {
+    setState(() {
+      tasks.removeAt(index);
+    });
+  }
+
+  void addNewTask() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => NewTask(onTaskCreated: onTaskCreated),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +72,9 @@ class _AppState extends State<App> {
               ),
             ),
             IconButton(
-              iconSize: 34,
+              iconSize: 30,
               color: Colors.white,
-              onPressed: () {},
+              onPressed: addNewTask,
               icon: Icon(Icons.add),
             ),
           ],
@@ -62,6 +82,7 @@ class _AppState extends State<App> {
       ),
       body: TasksScreen(
         tasks: tasks,
+        delete: delete,
       ),
     );
   }
