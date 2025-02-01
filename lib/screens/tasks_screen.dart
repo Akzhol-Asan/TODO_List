@@ -18,17 +18,21 @@ class TasksScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: tasks
-              .asMap()
-              .map((index, task) => MapEntry(
-                  index,
-                  TaskCard(
-                    task: task,
-                    delete: () => delete(index),
-                  )))
-              .values
-              .toList(),
+        child: Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: tasks
+                  .asMap()
+                  .map((index, task) => MapEntry(
+                      index,
+                      TaskCard(
+                        task: task,
+                        delete: () => delete(index),
+                      )))
+                  .values
+                  .toList(),
+            ),
+          ),
         ),
       ),
     );

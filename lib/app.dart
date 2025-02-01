@@ -13,21 +13,25 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   List<Task> tasks = [
     Task(
-        title: 'Fix bugs and optimize performance',
-        deadline: 'Deadline: 01.01.2025 / 19:00',
-        doneTime: 'Done: 01.01.2025 / 10:00'),
+      title: 'Fix bugs and optimize performance',
+      deadLine: DateTime.now(),
+      doneTime: 'Done: 01.01.2025 / 10:00',
+    ),
     Task(
-        title: 'Review pull requests from teammates',
-        deadline: 'Deadline: 01.01.2025 / 19:00',
-        doneTime: 'Done: 01.01.2025 / 15:00'),
+      title: 'Review pull requests from teammates',
+      deadLine: DateTime.now(),
+      doneTime: 'Done: 01.01.2025 / 15:00',
+    ),
     Task(
-        title: 'Attend daily stand-up meetings',
-        deadline: 'Deadline: 01.01.2025 / 19:00',
-        doneTime: 'Done: 01.01.2025 / 12:00'),
+      title: 'Attend daily stand-up meetings',
+      deadLine: DateTime.now(),
+      doneTime: 'Done: 01.01.2025 / 12:00',
+    ),
     Task(
-        title: 'Deploy and monitor application. ',
-        deadline: 'Deadline: 01.01.2025 / 19:00',
-        doneTime: 'Done: 01.01.2025 / 17:00'),
+      title: 'Deploy and monitor application. ',
+      deadLine: DateTime.now(),
+      doneTime: 'Done: 01.01.2025 / 17:00',
+    ),
   ];
 
   void onTaskCreated(Task newTask) {

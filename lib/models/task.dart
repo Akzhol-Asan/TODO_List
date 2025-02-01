@@ -1,11 +1,11 @@
 class Task {
   final String title;
-  final String deadline;
+  final DateTime deadLine;
   final String doneTime;
 
   Task({
     required this.title,
-    required this.deadline,
     required this.doneTime,
+    required this.deadLine,
   });
 }

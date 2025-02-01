@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_list/helpers/format_datetime.dart';
 import 'package:to_do_list/models/task.dart';
 import 'package:to_do_list/widgets/button_delete.dart';
 import 'package:to_do_list/widgets/button_done.dart';
@@ -19,11 +20,33 @@ class TaskCard extends StatefulWidget {
 
 class _TaskCardState extends State<TaskCard> {
   bool taskCompleted = false;
+  DateTime? doneAt;
 
   void doneIsClicked(bool newValue) {
     setState(() {
       taskCompleted = newValue;
+      doneAt = newValue ? DateTime.now() : null;
     });
+  }
+
+  Color cardColor() {
+    if (doneAt == null) {
+      return Color.fromRGBO(72, 72, 72, 1);
+    } else if (doneAt!.isAfter(widget.task.deadLine)) {
+      return Color.fromRGBO(98, 50, 46, 1);
+    } else {
+      return Color.fromRGBO(54, 91, 77, 1);
+    }
+  }
+
+  Color borderColor() {
+    if (doneAt == null) {
+      return Color.fromRGBO(72, 72, 72, 1);
+    } else if (doneAt!.isAfter(widget.task.deadLine)) {
+      return Color.fromRGBO(191, 71, 61, 1);
+    } else {
+      return Color.fromRGBO(79, 173, 136, 1);
+    }
   }
 
   @override
@@ -32,14 +55,10 @@ class _TaskCardState extends State<TaskCard> {
     final bodySmallStyle = theme.textTheme.bodySmall;
 
     return Card(
-      color: taskCompleted
-          ? Color.fromRGBO(54, 91, 77, 1)
-          : Color.fromRGBO(72, 72, 72, 1),
-      shape: taskCompleted
-          ? RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color: Colors.green.shade200, width: 1))
-          : null,
+      color: cardColor(),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: borderColor(), width: 1)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
@@ -70,14 +89,20 @@ class _TaskCardState extends State<TaskCard> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      Text(widget.task.deadline,
-                          style: bodySmallStyle!.copyWith(
-                            color: Colors.white,
-                          )),
-                      Text(widget.task.doneTime,
-                          style: bodySmallStyle.copyWith(
-                            color: Colors.white,
-                          )),
+                      Text(
+                        'Deadline: ${formatDateTime(widget.task.deadLine)}',
+                        style: bodySmallStyle!.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        doneAt != null
+                            ? 'Done: ${formatDateTime(doneAt!)}'
+                            : 'in Progress',
+                        style: bodySmallStyle.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                   IconButton(
