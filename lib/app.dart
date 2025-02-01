@@ -14,23 +14,18 @@ class _AppState extends State<App> {
   List<Task> tasks = [
     Task(
       title: 'Fix bugs and optimize performance',
-      deadLine: DateTime.now(),
-      doneTime: 'Done: 01.01.2025 / 10:00',
+      deadLine: DateTime.now().add(Duration(days: 1, hours: 1)),
+      doneTime: 'In Progress',
     ),
     Task(
       title: 'Review pull requests from teammates',
       deadLine: DateTime.now(),
-      doneTime: 'Done: 01.01.2025 / 15:00',
+      doneTime: 'In Progress',
     ),
     Task(
       title: 'Attend daily stand-up meetings',
       deadLine: DateTime.now(),
-      doneTime: 'Done: 01.01.2025 / 12:00',
-    ),
-    Task(
-      title: 'Deploy and monitor application. ',
-      deadLine: DateTime.now(),
-      doneTime: 'Done: 01.01.2025 / 17:00',
+      doneTime: 'In Progress',
     ),
   ];
 
