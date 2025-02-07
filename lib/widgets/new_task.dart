@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_list/data/categories_data.dart';
 import 'package:to_do_list/helpers/format_datetime.dart';
 import 'package:to_do_list/models/task.dart';
 
@@ -19,6 +20,7 @@ class _NewTaskState extends State<NewTask> {
   var deadLine = '';
   var selectedDate = DateTime.now();
   var selectedTimeOfDay = TimeOfDay.now();
+  String? selectedCategory;
 
   final dateController = TextEditingController();
   final timeController = TextEditingController();
@@ -35,6 +37,9 @@ class _NewTaskState extends State<NewTask> {
   }
 
   void onSaved() {
+    if (selectedCategory == null) {
+      return;
+    }
     final doneTime = DateTime.now();
 
     final dateTime = DateTime(
@@ -48,7 +53,7 @@ class _NewTaskState extends State<NewTask> {
       title: title,
       deadLine: dateTime,
       doneTime: formatDateTime(doneTime),
-      categoryId: 'home_tasks',
+      categoryId: selectedCategory!,
     );
     widget.onTaskCreated(newTask);
     Navigator.pop(context);
@@ -102,60 +107,77 @@ class _NewTaskState extends State<NewTask> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Container(
         width: double.infinity,
-        height: 300,
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: TextField(
-                onChanged: (value) => setState(() {
-                  title = value;
-                }),
-                decoration: InputDecoration(label: Text('Add new task')),
-              ),
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              child: TextField(
-                readOnly: true,
-                controller: dateController,
-                onTap: onDateTap,
-                onChanged: (value) => setState(() {
-                  deadLine = value;
-                }),
-                decoration: InputDecoration(label: Text('Deadline Date')),
-              ),
-            ),
-            Expanded(
-              child: TextField(
-                onTap: onTimeTap,
-                readOnly: true,
-                controller: timeController,
-                onChanged: (value) => setState(() {
-                  deadLine = value;
-                }),
-                decoration: InputDecoration(label: Text('Deadline Time')),
-              ),
-            ),
-            SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                      onPressed: onCanceled, child: Text('Cancel')),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, bottomInset + 16),
+        child: SingleChildScrollView(
+          child: Wrap(
+            runSpacing: 16,
+            children: [
+              Expanded(
+                child: TextField(
+                  onChanged: (value) => setState(() {
+                    title = value;
+                  }),
+                  decoration: InputDecoration(label: Text('Add new task')),
                 ),
-                SizedBox(width: 16),
-                Expanded(
-                  child:
-                      ElevatedButton(onPressed: onSaved, child: Text('Save')),
+              ),
+              DropdownMenu(
+                  expandedInsets: EdgeInsets.zero,
+                  label: Text('Category'),
+                  onSelected: (value) {
+                    setState(() {
+                      selectedCategory = value;
+                    });
+                  },
+                  dropdownMenuEntries: categories
+                      .map((category) => DropdownMenuEntry(
+                            value: category.id,
+                            label: category.title,
+                            leadingIcon: Icon(category.icon),
+                          ))
+                      .toList()),
+              Expanded(
+                child: TextField(
+                  readOnly: true,
+                  controller: dateController,
+                  onTap: onDateTap,
+                  onChanged: (value) => setState(() {
+                    deadLine = value;
+                  }),
+                  decoration: InputDecoration(label: Text('Deadline Date')),
                 ),
-              ],
-            )
-          ],
+              ),
+              Expanded(
+                child: TextField(
+                  onTap: onTimeTap,
+                  readOnly: true,
+                  controller: timeController,
+                  onChanged: (value) => setState(() {
+                    deadLine = value;
+                  }),
+                  decoration: InputDecoration(label: Text('Deadline Time')),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                        onPressed: onCanceled, child: Text('Cancel')),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child:
+                        ElevatedButton(onPressed: onSaved, child: Text('Save')),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

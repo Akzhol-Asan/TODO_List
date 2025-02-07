@@ -46,6 +46,8 @@ class _AppState extends State<App> {
 
   void addNewTask() {
     showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
       context: context,
       builder: (ctx) => NewTask(onTaskCreated: onTaskCreated),
     );
