@@ -11,6 +11,23 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  String? selectedCategory = 'all';
+  List<Task> getChosenTask() {
+    if (selectedCategory == 'all') {
+      return tasks;
+    } else {
+      return tasks
+          .where((task) => task.categoryId == selectedCategory)
+          .toList();
+    }
+  }
+
+  void onCategorySelected(String? categoryId) {
+    setState(() {
+      selectedCategory = categoryId;
+    });
+  }
+
   List<Task> tasks = [
     Task(
       title: 'Fix bugs and optimize performance',
@@ -55,6 +72,8 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredTasks = getChosenTask();
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(37, 37, 37, 1),
       appBar: AppBar(
@@ -85,8 +104,9 @@ class _AppState extends State<App> {
         ),
       ),
       body: TasksScreen(
-        tasks: tasks,
+        tasks: filteredTasks,
         delete: delete,
+        onCategorySelected: onCategorySelected,
       ),
     );
   }
