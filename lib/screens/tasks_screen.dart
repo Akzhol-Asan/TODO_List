@@ -21,45 +21,44 @@ class TasksScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: DropdownMenu(
-                    expandedInsets: EdgeInsets.zero,
-                    label: Text(
-                      'Category',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    initialSelection: 'all',
-                    onSelected: onCategorySelected,
-                    dropdownMenuEntries: allCategories
-                        .map((category) => DropdownMenuEntry(
-                              value: category.id,
-                              label: category.title,
-                              leadingIcon: Icon(
-                                category.icon,
-                              ),
-                            ))
-                        .toList(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: DropdownMenu(
+                  expandedInsets: EdgeInsets.zero,
+                  label: Text(
+                    'Category',
+                    style: TextStyle(color: Colors.grey),
                   ),
-                ),
-                Column(
-                  children: tasks
-                      .asMap()
-                      .map((index, task) => MapEntry(
-                          index,
-                          TaskCard(
-                            task: task,
-                            delete: () => delete(index),
-                          )))
-                      .values
+                  initialSelection: 'all',
+                  onSelected: onCategorySelected,
+                  dropdownMenuEntries: allCategories
+                      .map((category) => DropdownMenuEntry(
+                            value: category.id,
+                            label: category.title,
+                            leadingIcon: Icon(
+                              category.icon,
+                            ),
+                          ))
                       .toList(),
+                  textStyle: TextStyle(color: Colors.green.shade600),
                 ),
-              ],
-            ),
+              ),
+              Column(
+                children: tasks
+                    .asMap()
+                    .map((index, task) => MapEntry(
+                        index,
+                        TaskCard(
+                          task: task,
+                          delete: () => delete(index),
+                        )))
+                    .values
+                    .toList(),
+              ),
+            ],
           ),
         ),
       ),
