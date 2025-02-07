@@ -89,6 +89,33 @@ class _TaskCardState extends State<TaskCard> {
                         ),
                       ),
                       SizedBox(height: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black87,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 5, bottom: 5, left: 5, right: 8),
+                          child: Row(
+                            children: [
+                              Icon(
+                                widget.task.category.icon,
+                                size: 16,
+                                color: Colors.green,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                widget.task.category.title,
+                                style: theme.textTheme.bodySmall!.copyWith(
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       Text(
                         'Deadline: ${formatDateTime(widget.task.deadLine)}',
                         style: bodySmallStyle!.copyWith(

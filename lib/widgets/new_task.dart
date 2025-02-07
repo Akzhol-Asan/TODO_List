@@ -48,6 +48,7 @@ class _NewTaskState extends State<NewTask> {
       title: title,
       deadLine: dateTime,
       doneTime: formatDateTime(doneTime),
+      categoryId: 'home_tasks',
     );
     widget.onTaskCreated(newTask);
     Navigator.pop(context);

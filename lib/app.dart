@@ -16,16 +16,19 @@ class _AppState extends State<App> {
       title: 'Fix bugs and optimize performance',
       deadLine: DateTime.now().add(Duration(days: 1, hours: 1)),
       doneTime: 'In Progress',
+      categoryId: 'work_tasks',
     ),
     Task(
       title: 'Review pull requests from teammates',
       deadLine: DateTime.now(),
       doneTime: 'In Progress',
+      categoryId: 'school_tasks',
     ),
     Task(
       title: 'Attend daily stand-up meetings',
       deadLine: DateTime.now(),
       doneTime: 'In Progress',
+      categoryId: 'home_tasks',
     ),
   ];
 
