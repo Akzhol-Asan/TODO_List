@@ -27,6 +27,11 @@ class _NewTaskState extends State<NewTask> {
   final titleController = TextEditingController();
   final deadLineController = TextEditingController();
 
+  bool isDateSelected = false;
+  bool isTimeSelected = false;
+
+  String deadLineClearedText = '';
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +57,7 @@ class _NewTaskState extends State<NewTask> {
     if (selectedCategory == null) {
       return;
     }
+
     final doneTime = DateTime.now();
 
     final dateTime = DateTime(
@@ -63,14 +69,25 @@ class _NewTaskState extends State<NewTask> {
     );
 
     final newTask = Task(
-      id: widget.existingTask?.id,
+      id: widget.existingTask?.id ?? DateTime.now().toString(),
       title: titleController.text,
-      deadLine: dateTime,
+      deadLine: deadLineClearedText.isEmpty ? DateTime.now() : dateTime,
       doneTime: formatDateTime(doneTime),
       categoryId: selectedCategory!,
     );
+
     widget.onTaskCreated(newTask);
     Navigator.pop(context);
+  }
+
+  void clearDateTime() {
+    setState(() {
+      selectedDate = DateTime.now();
+      selectedTimeOfDay = TimeOfDay.now();
+      dateController.clear();
+      timeController.clear();
+      deadLineClearedText = '';
+    });
   }
 
   void onDateTap() async {
@@ -90,6 +107,7 @@ class _NewTaskState extends State<NewTask> {
       setState(() {
         selectedDate = dateFromUser;
         dateController.text = formatDate(dateFromUser);
+        isDateSelected = true;
       });
     }
   }
@@ -114,6 +132,7 @@ class _NewTaskState extends State<NewTask> {
         setState(() {
           selectedTimeOfDay = pickedTime;
           timeController.text = formatTime(pickedTime);
+          isTimeSelected = true;
         });
       }
     }
@@ -176,11 +195,22 @@ class _NewTaskState extends State<NewTask> {
                   decoration: InputDecoration(label: Text('Deadline Time')),
                 ),
               ),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 40),
+                  ),
+                  onPressed: clearDateTime,
+                  child: Text('Clear DeadLine'),
+                ),
+              ),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                        onPressed: onCanceled, child: Text('Cancel')),
+                      onPressed: onCanceled,
+                      child: Text('Cancel'),
+                    ),
                   ),
                   SizedBox(width: 16),
                   Expanded(

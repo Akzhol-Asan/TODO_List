@@ -47,6 +47,18 @@ class _AppState extends State<App> {
       doneTime: 'In Progress',
       categoryId: 'home_tasks',
     ),
+    Task(
+      title: 'Fix bugs and optimize performance',
+      deadLine: DateTime.now().add(Duration(days: 1, hours: 1)),
+      doneTime: 'In Progress',
+      categoryId: 'work_tasks',
+    ),
+    Task(
+      title: 'Review pull requests from teammates',
+      deadLine: DateTime.now(),
+      doneTime: 'In Progress',
+      categoryId: 'school_tasks',
+    ),
   ];
 
   void onTaskCreated(Task newTask) {
@@ -99,6 +111,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     final filteredTasks = getChosenTask();
+    tasks.sort((a, b) => a.deadLine.compareTo(b.deadLine));
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(37, 37, 37, 1),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:to_do_list/data/categories_data.dart';
 import 'package:to_do_list/models/task.dart';
 import 'package:to_do_list/widgets/task_card.dart';
@@ -25,52 +26,62 @@ class TasksScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: DropdownMenu(
-                  expandedInsets: EdgeInsets.zero,
-                  label: Text(
-                    'Category',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  initialSelection: 'all',
-                  onSelected: onCategorySelected,
-                  dropdownMenuEntries: allCategories
-                      .map((category) => DropdownMenuEntry(
-                            value: category.id,
-                            label: category.title,
-                            leadingIcon: Icon(
-                              category.icon,
-                            ),
-                          ))
-                      .toList(),
-                  textStyle: TextStyle(color: Colors.green.shade600),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: DropdownMenu(
+                expandedInsets: EdgeInsets.zero,
+                label: Text(
+                  'Category',
+                  style: TextStyle(color: Colors.grey),
                 ),
-              ),
-              Column(
-                children: tasks
-                    .asMap()
-                    .map(
-                      (index, task) => MapEntry(
-                        index,
-                        Dismissible(
-                          key: ValueKey(task.id),
-                          onDismissed: (direction) => onTaskDeleted(task.id),
-                          child: GestureDetector(
-                              onTap: () => onTaskEdited(task.id),
-                              child: TaskCard(
-                                  task: task, delete: () => delete(index))),
-                        ),
-                      ),
-                    )
-                    .values
+                initialSelection: 'all',
+                onSelected: onCategorySelected,
+                dropdownMenuEntries: allCategories
+                    .map((category) => DropdownMenuEntry(
+                          value: category.id,
+                          label: category.title,
+                          leadingIcon: Icon(
+                            category.icon,
+                          ),
+                        ))
                     .toList(),
+                textStyle: TextStyle(color: Colors.green.shade600),
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: tasks.length,
+                itemBuilder: (ctx, index) {
+                  final task = tasks[index];
+                  return Slidable(
+                    endActionPane: ActionPane(
+                      motion: DrawerMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (ctx) => onTaskDeleted(task.id),
+                          icon: Icons.delete,
+                          backgroundColor: Colors.red.shade600,
+                          label: 'Delete',
+                        ),
+                        SlidableAction(
+                          onPressed: (ctx) => onTaskEdited(task.id),
+                          icon: Icons.edit,
+                          backgroundColor: Colors.blue.shade600,
+                          label: 'Edit',
+                        ),
+                      ],
+                    ),
+                    child: TaskCard(
+                      task: task,
+                      delete: () => delete(index),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
