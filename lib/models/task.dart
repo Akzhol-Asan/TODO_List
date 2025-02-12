@@ -12,11 +12,12 @@ class Task {
   final String categoryId;
 
   Task({
+    String? id,
     required this.title,
     required this.doneTime,
     required this.deadLine,
     required this.categoryId,
-  }) : id = uuid.v4();
+  }) : id = id ?? uuid.v4();
 
   TaskCategory get category {
     return categories.firstWhere((c) => c.id == categoryId);

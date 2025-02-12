@@ -18,18 +18,28 @@ class NewTask extends StatefulWidget {
 }
 
 class _NewTaskState extends State<NewTask> {
-  var title = '';
-  var deadLine = '';
   var selectedDate = DateTime.now();
   var selectedTimeOfDay = TimeOfDay.now();
   String? selectedCategory;
 
   final dateController = TextEditingController();
   final timeController = TextEditingController();
+  final titleController = TextEditingController();
+  final deadLineController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.existingTask != null) {
+      final existingTask = widget.existingTask!;
+      titleController.text = existingTask.title;
+      deadLineController.text = formatDate(existingTask.deadLine);
+      selectedDate = existingTask.deadLine;
+      selectedTimeOfDay = TimeOfDay.fromDateTime(existingTask.deadLine);
+      selectedCategory = existingTask.categoryId;
+    }
+
     dateController.text = formatDate(selectedDate);
     timeController.text = formatTime(selectedTimeOfDay);
   }
@@ -51,8 +61,10 @@ class _NewTaskState extends State<NewTask> {
       selectedTimeOfDay.hour,
       selectedTimeOfDay.minute,
     );
+
     final newTask = Task(
-      title: title,
+      id: widget.existingTask?.id,
+      title: titleController.text,
       deadLine: dateTime,
       doneTime: formatDateTime(doneTime),
       categoryId: selectedCategory!,
@@ -122,15 +134,14 @@ class _NewTaskState extends State<NewTask> {
             children: [
               Expanded(
                 child: TextField(
-                  onChanged: (value) => setState(() {
-                    title = value;
-                  }),
+                  controller: titleController,
                   decoration: InputDecoration(label: Text('Add new task')),
                 ),
               ),
               DropdownMenu(
                   expandedInsets: EdgeInsets.zero,
                   label: Text('Category'),
+                  initialSelection: selectedCategory,
                   onSelected: (value) {
                     setState(() {
                       selectedCategory = value;
@@ -149,7 +160,7 @@ class _NewTaskState extends State<NewTask> {
                   controller: dateController,
                   onTap: onDateTap,
                   onChanged: (value) => setState(() {
-                    deadLine = value;
+                    deadLineController.text = value;
                   }),
                   decoration: InputDecoration(label: Text('Deadline Date')),
                 ),
@@ -160,7 +171,7 @@ class _NewTaskState extends State<NewTask> {
                   readOnly: true,
                   controller: timeController,
                   onChanged: (value) => setState(() {
-                    deadLine = value;
+                    deadLineController.text = value;
                   }),
                   decoration: InputDecoration(label: Text('Deadline Time')),
                 ),

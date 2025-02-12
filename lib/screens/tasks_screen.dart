@@ -8,6 +8,7 @@ class TasksScreen extends StatelessWidget {
   final Function(int) delete;
   final Function(String?) onCategorySelected;
   final void Function(String id) onTaskDeleted;
+  final void Function(String id) onTaskEdited;
 
   const TasksScreen({
     super.key,
@@ -15,6 +16,7 @@ class TasksScreen extends StatelessWidget {
     required this.delete,
     required this.onCategorySelected,
     required this.onTaskDeleted,
+    required this.onTaskEdited,
   });
 
   @override
@@ -57,10 +59,10 @@ class TasksScreen extends StatelessWidget {
                         Dismissible(
                           key: ValueKey(task.id),
                           onDismissed: (direction) => onTaskDeleted(task.id),
-                          child: TaskCard(
-                            task: task,
-                            delete: () => delete(index),
-                          ),
+                          child: GestureDetector(
+                              onTap: () => onTaskEdited(task.id),
+                              child: TaskCard(
+                                  task: task, delete: () => delete(index))),
                         ),
                       ),
                     )

@@ -76,6 +76,26 @@ class _AppState extends State<App> {
     });
   }
 
+  void editTask(Task editedTask) {
+    setState(() {
+      final index = tasks.indexWhere((task) => task.id == editedTask.id);
+      tasks[index] = editedTask;
+    });
+  }
+
+  void openTaskSheet(String id) {
+    final existingTask = tasks.firstWhere((task) => task.id == id);
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewTask(
+        onTaskCreated: editTask,
+        existingTask: existingTask,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final filteredTasks = getChosenTask();
@@ -114,6 +134,7 @@ class _AppState extends State<App> {
         delete: delete,
         onCategorySelected: onCategorySelected,
         onTaskDeleted: deleteTask,
+        onTaskEdited: openTaskSheet,
       ),
     );
   }
