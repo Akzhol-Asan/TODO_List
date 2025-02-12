@@ -5,10 +5,12 @@ import 'package:to_do_list/models/task.dart';
 
 class NewTask extends StatefulWidget {
   final void Function(Task newTask) onTaskCreated;
+  final Task? existingTask;
 
   const NewTask({
     super.key,
     required this.onTaskCreated,
+    this.existingTask,
   });
 
   @override

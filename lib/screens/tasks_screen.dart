@@ -7,12 +7,14 @@ class TasksScreen extends StatelessWidget {
   final List<Task> tasks;
   final Function(int) delete;
   final Function(String?) onCategorySelected;
+  final void Function(String id) onTaskDeleted;
 
   const TasksScreen({
     super.key,
     required this.tasks,
     required this.delete,
     required this.onCategorySelected,
+    required this.onTaskDeleted,
   });
 
   @override
@@ -49,12 +51,19 @@ class TasksScreen extends StatelessWidget {
               Column(
                 children: tasks
                     .asMap()
-                    .map((index, task) => MapEntry(
+                    .map(
+                      (index, task) => MapEntry(
                         index,
-                        TaskCard(
-                          task: task,
-                          delete: () => delete(index),
-                        )))
+                        Dismissible(
+                          key: ValueKey(task.id),
+                          onDismissed: (direction) => onTaskDeleted(task.id),
+                          child: TaskCard(
+                            task: task,
+                            delete: () => delete(index),
+                          ),
+                        ),
+                      ),
+                    )
                     .values
                     .toList(),
               ),

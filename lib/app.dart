@@ -70,6 +70,12 @@ class _AppState extends State<App> {
     );
   }
 
+  void deleteTask(String id) {
+    setState(() {
+      tasks.removeWhere((task) => task.id == id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final filteredTasks = getChosenTask();
@@ -107,6 +113,7 @@ class _AppState extends State<App> {
         tasks: filteredTasks,
         delete: delete,
         onCategorySelected: onCategorySelected,
+        onTaskDeleted: deleteTask,
       ),
     );
   }
